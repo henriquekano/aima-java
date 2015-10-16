@@ -159,64 +159,63 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		protected void selectScenarioAndDest(int scenarioIdx, int destIdx) {
 			ExtendableMap map = (ExtendableMap) maps.get("Romania");
 			MapEnvironment env = new MapEnvironment(map);
-			String agentLoc = null;
-			switch (scenarioIdx) {
-			case 0:
-				SimplifiedRoadMapOfPartOfRomania.initMap(map);
-				agentLoc = SimplifiedRoadMapOfPartOfRomania.ARAD;
-				break;
-			case 1:
-				SimplifiedRoadMapOfPartOfRomania.initMap(map);
-				agentLoc = SimplifiedRoadMapOfPartOfRomania.LUGOJ;
-				break;
-			case 2:
-				SimplifiedRoadMapOfPartOfRomania.initMap(map);
-				agentLoc = SimplifiedRoadMapOfPartOfRomania.FAGARAS;
-				break;
-			case 3:
-				SimplifiedRoadMapOfAustralia.initMap(map);
-				agentLoc = SimplifiedRoadMapOfAustralia.SYDNEY;
-				break;
-			case 4:
-				SimplifiedRoadMapOfAustralia.initMap(map);
-				agentLoc = map.randomlyGenerateDestination();
-				break;
-			}
+			String agentLoc = map.getLocations().get(scenarioIdx);
+//			switch (scenarioIdx) {
+//			case 0:
+//				SimplifiedRoadMapOfPartOfRomania.initMap(map);
+//				agentLoc = SimplifiedRoadMapOfPartOfRomania.ARAD;
+//				break;
+//			case 1:
+//				SimplifiedRoadMapOfPartOfRomania.initMap(map);
+//				agentLoc = SimplifiedRoadMapOfPartOfRomania.LUGOJ;
+//				break;
+//			case 2:
+//				SimplifiedRoadMapOfPartOfRomania.initMap(map);
+//				agentLoc = SimplifiedRoadMapOfPartOfRomania.FAGARAS;
+//				break;
+//			case 3:
+//				SimplifiedRoadMapOfAustralia.initMap(map);
+//				agentLoc = SimplifiedRoadMapOfAustralia.SYDNEY;
+//				break;
+//			case 4:
+//				SimplifiedRoadMapOfAustralia.initMap(map);
+//				agentLoc = map.randomlyGenerateDestination();
+//				break;
+//			}
 			scenario = new Scenario(env, map, agentLoc);
-
 			destinations = new ArrayList<String>();
-			if (scenarioIdx < 3) {
-				switch (destIdx) {
-				case 0:
-					destinations
-							.add(SimplifiedRoadMapOfPartOfRomania.BUCHAREST);
-					break;
-				case 1:
-					destinations.add(SimplifiedRoadMapOfPartOfRomania.EFORIE);
-					break;
-				case 2:
-					destinations.add(SimplifiedRoadMapOfPartOfRomania.NEAMT);
-					break;
-				case 3:
-					destinations.add(map.randomlyGenerateDestination());
-					break;
-				}
-			} else {
-				switch (destIdx) {
-				case 0:
-					destinations.add(SimplifiedRoadMapOfAustralia.PORT_HEDLAND);
-					break;
-				case 1:
-					destinations.add(SimplifiedRoadMapOfAustralia.ALBANY);
-					break;
-				case 2:
-					destinations.add(SimplifiedRoadMapOfAustralia.MELBOURNE);
-					break;
-				case 3:
-					destinations.add(map.randomlyGenerateDestination());
-					break;
-				}
-			}
+			destinations.add(map.getLocations().get(destIdx));
+//			if (scenarioIdx < 3) {
+//				switch (destIdx) {
+//				case 0:
+//					destinations.add(SimplifiedRoadMapOfPartOfRomania.BUCHAREST);
+//					break;
+//				case 1:
+//					destinations.add(SimplifiedRoadMapOfPartOfRomania.EFORIE);
+//					break;
+//				case 2:
+//					destinations.add(SimplifiedRoadMapOfPartOfRomania.NEAMT);
+//					break;
+//				case 3:
+//					destinations.add(map.randomlyGenerateDestination());
+//					break;
+//				}
+//			} else {
+//				switch (destIdx) {
+//				case 0:
+//					destinations.add(SimplifiedRoadMapOfAustralia.PORT_HEDLAND);
+//					break;
+//				case 1:
+//					destinations.add(SimplifiedRoadMapOfAustralia.ALBANY);
+//					break;
+//				case 2:
+//					destinations.add(SimplifiedRoadMapOfAustralia.MELBOURNE);
+//					break;
+//				case 3:
+//					destinations.add(map.randomlyGenerateDestination());
+//					break;
+//				}
+//			}
 		}
 
 		/**
