@@ -1,6 +1,12 @@
 package aima.gui.applications.search.map;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import aima.core.environment.map.AdaptableHeuristicFunction;
 import aima.core.environment.map.ExtendableMap;
@@ -27,6 +33,46 @@ import aima.gui.framework.SimpleAgentApp;
  * @author Ruediger Lunde
  */
 public class RouteFindingAgentApp extends SimpleAgentApp {
+
+	private static String MAP_SOURCE_FILE = "C:/Users/master/Henrique/eclipse/workspace/aima-java/aima-gui/src/main/java/aima/gui/applications/search/map/map.txt";
+	private static Map<String, aima.core.environment.map.Map> maps = new HashMap<String, aima.core.environment.map.Map>();
+	
+	private static void createMap(String fileName){
+		try{
+			ExtendableMap map = new ExtendableMap();
+			FileInputStream fstream = new FileInputStream(MAP_SOURCE_FILE);
+			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+			String[] lineParameters = {};
+			String mapName = br.readLine();
+			System.out.println("mapName: " + mapName);
+			
+			int localsNumber = Integer.parseInt(br.readLine());
+			System.out.println("locals number" + localsNumber);
+			for(int i = 0; i < localsNumber; i++){
+				lineParameters = br.readLine().split(" ");
+				System.out.println("local " + (i + 1) + ": " + String.join(",", lineParameters));
+				map.setDistAndDirToRefLocation(
+						lineParameters[0], 
+						Double.parseDouble(lineParameters[1]), 
+						Integer.parseInt(lineParameters[2]));
+			}
+	
+			int routesNumber = Integer.parseInt(br.readLine());
+			System.out.println("routes number" + routesNumber);
+			for(int i = 0; i < routesNumber; i++){
+				lineParameters = br.readLine().split(" ");
+				System.out.println("route " + (i + 1) + ": " + String.join(",", lineParameters));
+				map.addBidirectionalLink(
+						lineParameters[0], 
+						lineParameters[1], 
+						Double.parseDouble(lineParameters[2]));
+			}
+			
+			maps.put(mapName, map);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	} 
 
 	/** Creates a <code>MapAgentView</code>. */
 	public AgentAppEnvironmentView createEnvironmentView() {
@@ -57,21 +103,15 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		};
 
 		private MapType usedMap = null;
-		private static String[] ROMANIA_DESTS = new String[] {
-				"to Bucharest", "to Eforie", "to Neamt",
-				"to Random" };
-		private static String[] AUSTRALIA_DESTS = new String[] {
-				"to Port Hedland", "to Albany", "to Melbourne",
-				"to Random" };
+		private static String[] ROMANIA_DESTS = (String[]) maps.get("Romania").getLocations().toArray(new String[maps.get("Romania").getLocations().size()]);
+//		private static String[] AUSTRALIA_DESTS = new String[] {
+//				"to Port Hedland", "to Albany", "to Melbourne",
+//				"to Random" };
 
 		/** Creates a new frame. */
 		public RouteFindingAgentFrame() {
 			setTitle("RFA - the Route Finding Agent");
-			setSelectorItems(SCENARIO_SEL, new String[] {
-					"Romania, from Arad", "Romania, from Lugoj",
-					"Romania, from Fagaras",
-					"Australia, from Sydney",
-					"Australia, from Random" }, 0);
+			setSelectorItems(SCENARIO_SEL, ROMANIA_DESTS, 0);
 			setSelectorItems(SEARCH_MODE_SEL, SearchFactory.getInstance()
 					.getSearchModeNames(), 1); // change the default!
 			setSelectorItems(HEURISTIC_SEL, new String[] { "=0", "SLD" }, 1);
@@ -92,12 +132,15 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 				usedMap = mtype;
 				String[] items = null;
 				switch (mtype) {
-				case ROMANIA:
-					items = ROMANIA_DESTS;
-					break;
-				case AUSTRALIA:
-					items = AUSTRALIA_DESTS;
-					break;
+					case ROMANIA:
+						items = ROMANIA_DESTS;
+						break;
+					default:
+						items = ROMANIA_DESTS;
+						break;
+	//				case AUSTRALIA:
+	//					items = AUSTRALIA_DESTS;
+	//					break;
 				}
 				setSelectorItems(DESTINATION_SEL, items, 0);
 			}
@@ -114,7 +157,7 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		 */
 		@Override
 		protected void selectScenarioAndDest(int scenarioIdx, int destIdx) {
-			ExtendableMap map = new ExtendableMap();
+			ExtendableMap map = (ExtendableMap) maps.get("Romania");
 			MapEnvironment env = new MapEnvironment(map);
 			String agentLoc = null;
 			switch (scenarioIdx) {
@@ -253,6 +296,7 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 
 	/** Application starter. */
 	public static void main(String args[]) {
+		createMap(MAP_SOURCE_FILE);
 		new RouteFindingAgentApp().startApplication();
 	}
 }
