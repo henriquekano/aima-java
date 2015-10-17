@@ -3,6 +3,7 @@ package aima.gui.applications.search.map;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,13 +35,14 @@ import aima.gui.framework.SimpleAgentApp;
  */
 public class RouteFindingAgentApp extends SimpleAgentApp {
 
-	private static String MAP_SOURCE_FILE = "C:/Users/master/Henrique/eclipse/workspace/aima-java/aima-gui/src/main/java/aima/gui/applications/search/map/map.txt";
+	private static String MAP_SOURCE_FILE = "map.txt";
+	
 	private static Map<String, aima.core.environment.map.Map> maps = new HashMap<String, aima.core.environment.map.Map>();
 	
-	private static void createMap(String fileName){
+	private static void createMap(String filePath){
 		try{
 			ExtendableMap map = new ExtendableMap();
-			FileInputStream fstream = new FileInputStream(MAP_SOURCE_FILE);
+			FileInputStream fstream = new FileInputStream(filePath);
 			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 			String[] lineParameters = {};
 			String mapName = br.readLine();
@@ -295,7 +297,11 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 
 	/** Application starter. */
 	public static void main(String args[]) {
-		createMap(MAP_SOURCE_FILE);
+		Class clazz = RouteFindingAgentApp.class;
+		String mapSourceURI = clazz.getResource(MAP_SOURCE_FILE).getPath();
+		
+		System.out.println(mapSourceURI);
+		createMap(mapSourceURI);
 		new RouteFindingAgentApp().startApplication();
 	}
 }
