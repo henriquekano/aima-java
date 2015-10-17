@@ -14,8 +14,6 @@ import aima.core.environment.map.ExtendableMap;
 import aima.core.environment.map.MapAgent;
 import aima.core.environment.map.MapEnvironment;
 import aima.core.environment.map.Scenario;
-import aima.core.environment.map.SimplifiedRoadMapOfAustralia;
-import aima.core.environment.map.SimplifiedRoadMapOfPartOfRomania;
 import aima.core.util.datastructure.Point2D;
 import aima.gui.framework.AgentAppController;
 import aima.gui.framework.AgentAppEnvironmentView;
