@@ -58,8 +58,6 @@ public class AgentAppFrame extends JFrame {
 	private JToggleButton pauseButton;
 	private JButton cancelButton;
 	private JLabel statusLabel;
-	private File file;
-	
 	private JFileChooser fileChooser;
 
 	protected JSplitPane centerPane;

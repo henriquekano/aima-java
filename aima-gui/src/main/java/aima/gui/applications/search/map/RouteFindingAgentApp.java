@@ -1,6 +1,7 @@
 package aima.gui.applications.search.map;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -37,20 +38,20 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 	
 	private static Map<String, aima.core.environment.map.Map> maps = new HashMap<String, aima.core.environment.map.Map>();
 	
-	private static void createMap(String filePath){
+	public static void createMap(File file){
 		try{
 			ExtendableMap map = new ExtendableMap();
-			FileInputStream fstream = new FileInputStream(filePath);
+			FileInputStream fstream = new FileInputStream(file);
 			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 			String[] lineParameters = {};
 			String mapName = br.readLine();
-			System.out.println("mapName: " + mapName);
+//			System.out.println("mapName: " + mapName);
 			
 			int localsNumber = Integer.parseInt(br.readLine());
-			System.out.println("locals number" + localsNumber);
+//			System.out.println("locals number" + localsNumber);
 			for(int i = 0; i < localsNumber; i++){
 				lineParameters = br.readLine().split(" ");
-				System.out.println("local " + (i + 1) + ": " + String.join(",", lineParameters));
+//				System.out.println("local " + (i + 1) + ": " + String.join(",", lineParameters));
 				map.setDistAndDirToRefLocation(
 						lineParameters[0], 
 						Double.parseDouble(lineParameters[1]), 
@@ -58,16 +59,16 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 			}
 	
 			int routesNumber = Integer.parseInt(br.readLine());
-			System.out.println("routes number" + routesNumber);
+//			System.out.println("routes number" + routesNumber);
 			for(int i = 0; i < routesNumber; i++){
 				lineParameters = br.readLine().split(" ");
-				System.out.println("route " + (i + 1) + ": " + String.join(",", lineParameters));
+//				System.out.println("route " + (i + 1) + ": " + String.join(",", lineParameters));
 				map.addBidirectionalLink(
 						lineParameters[0], 
 						lineParameters[1], 
 						Double.parseDouble(lineParameters[2]));
 			}
-			
+			System.out.println("New map: " + file.getName());
 			maps.put(mapName, map);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -298,8 +299,11 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		Class clazz = RouteFindingAgentApp.class;
 		String mapSourceURI = clazz.getResource(MAP_SOURCE_FILE).getPath();
 		
+		
 		System.out.println(mapSourceURI);
-		createMap(mapSourceURI);
+		File file = new File(mapSourceURI);
+		
+		createMap(file);
 		new RouteFindingAgentApp().startApplication();
 	}
 }

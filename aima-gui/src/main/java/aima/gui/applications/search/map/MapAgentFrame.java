@@ -44,7 +44,7 @@ public class MapAgentFrame extends AgentAppFrame {
 	
 	@Override
 	public void fileActionListener(File file) {
-		JOptionPane.showMessageDialog(null, "Esse cara é outro!");
+		RouteFindingAgentApp.createMap(file);
 	}
 
 }
