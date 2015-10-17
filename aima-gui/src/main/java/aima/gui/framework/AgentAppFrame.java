@@ -1,6 +1,8 @@
 package aima.gui.framework;
 
 import java.awt.BorderLayout;
+
+import java.io.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -9,8 +11,10 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
@@ -49,10 +53,14 @@ public class AgentAppFrame extends JFrame {
 	private JButton clearButton;
 	private JButton prepareButton;
 	private JButton runButton;
+	private JButton fileButton;
 	protected JButton stepButton;
 	private JToggleButton pauseButton;
 	private JButton cancelButton;
 	private JLabel statusLabel;
+	private File file;
+	
+	private JFileChooser fileChooser;
 
 	protected JSplitPane centerPane;
 	private MessageLoggerPanel messageLogger;
@@ -194,6 +202,11 @@ public class AgentAppFrame extends JFrame {
 		toolbar.setFloatable(false);
 		selectors = new SelectorContainer();
 		toolbar.add(Box.createHorizontalGlue());
+		
+		fileChooser = new JFileChooser();
+		fileButton = new JButton("Select a map");
+		fileButton.addActionListener(actionListener);
+		toolbar.add(fileButton);
 
 		clearButton = new JButton("Clear");
 		clearButton.setToolTipText("Clear Views");
@@ -261,6 +274,10 @@ public class AgentAppFrame extends JFrame {
 			updateEnabledState();
 		}
 	}
+	
+	public void fileActionListener(File file) {
+		JOptionPane.showMessageDialog(null, file.getName());
+	}
 
 	// ////////////////////////////////////////////////////////
 	// inner classes
@@ -308,6 +325,11 @@ public class AgentAppFrame extends JFrame {
 								setSimulationThread(null);
 							}
 						}
+					} else if (source == fileButton) {
+						int returnVal = fileChooser.showOpenDialog(AgentAppFrame.this);
+			            if (returnVal == JFileChooser.APPROVE_OPTION) {
+			                fileActionListener(fileChooser.getSelectedFile());
+			            }
 					} else if (selectors.combos.contains(source)) {
 						err = "when preparing the agent ";
 						selectionChanged(selectors

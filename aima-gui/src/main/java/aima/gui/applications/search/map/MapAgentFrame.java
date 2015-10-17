@@ -1,5 +1,9 @@
 package aima.gui.applications.search.map;
 
+import java.io.File;
+
+import javax.swing.JOptionPane;
+
 import aima.gui.framework.AgentAppFrame;
 
 /**
@@ -37,4 +41,10 @@ public class MapAgentFrame extends AgentAppFrame {
 		setSplitPaneResizeWeight(0.75);
 		setSize(1000, 700);
 	}
+	
+	@Override
+	public void fileActionListener(File file) {
+		JOptionPane.showMessageDialog(null, "Esse cara é outro!");
+	}
+
 }
