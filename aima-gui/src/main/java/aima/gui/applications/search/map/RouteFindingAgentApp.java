@@ -70,10 +70,19 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 			}
 			System.out.println("New map: " + file.getName());
 			maps.put(mapName, map);
+			
+			
+			
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	} 
+	
+//	public static void refreshDests(){
+//		String[] newDestinations = (String[]) maps.get("Sei La").getLocations().toArray(new String[maps.get("Sei La").getLocations().size()]);
+//		setSelectorItems(SCENARIO_SEL, newDestinations, 0);
+//	}
 
 	/** Creates a <code>MapAgentView</code>. */
 	public AgentAppEnvironmentView createEnvironmentView() {
@@ -125,6 +134,7 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		 */
 		@Override
 		protected void selectionChanged(String changedSelector) {
+			System.out.println(changedSelector);
 			SelectionState state = getSelection();
 			int scenarioIdx = state.getIndex(MapAgentFrame.SCENARIO_SEL);
 			RouteFindingAgentFrame.MapType mtype = (scenarioIdx < 3) ? MapType.ROMANIA
@@ -298,7 +308,6 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 	public static void main(String args[]) {
 		Class clazz = RouteFindingAgentApp.class;
 		String mapSourceURI = clazz.getResource(MAP_SOURCE_FILE).getPath();
-		
 		
 		System.out.println(mapSourceURI);
 		File file = new File(mapSourceURI);

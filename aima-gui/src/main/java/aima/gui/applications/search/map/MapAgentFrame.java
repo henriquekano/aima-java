@@ -20,6 +20,7 @@ public class MapAgentFrame extends AgentAppFrame {
 	
 	private static final long serialVersionUID = 1L;
 	public static String SCENARIO_SEL = "ScenarioSelection";
+	public static String ORIGIN_SEL = "OriginSelection";
 	public static String DESTINATION_SEL = "DestinationSelection";
 	public static String AGENT_SEL = "AgentSelection";
 	public static String SEARCH_SEL = "SearchSelection";
@@ -28,9 +29,9 @@ public class MapAgentFrame extends AgentAppFrame {
 
 	/** Standard constructor. */
 	public MapAgentFrame() {
-		setSelectors(new String[] { SCENARIO_SEL, DESTINATION_SEL, AGENT_SEL,
+		setSelectors(new String[] { SCENARIO_SEL, ORIGIN_SEL, DESTINATION_SEL, AGENT_SEL,
 				SEARCH_SEL, SEARCH_MODE_SEL, HEURISTIC_SEL }, new String[] {
-				"Select Scenario", "Select Destinations", "Select Agent",
+				"Select Scenario", "Select Origin", "Select Destinations", "Select Agent",
 				"Select Search Strategy", "Select Search Mode",
 				"Select Heuristic" });
 		setSelectorItems(SEARCH_SEL, SearchFactory.getInstance()
@@ -45,6 +46,8 @@ public class MapAgentFrame extends AgentAppFrame {
 	@Override
 	public void fileActionListener(File file) {
 		RouteFindingAgentApp.createMap(file);
+//		(String[]) maps.get("Romania").getLocations().toArray(new String[maps.get("Romania").getLocations().size()]);
+//		setSelectorItems(SCENARIO_SEL, ROMANIA_DESTS, 0);
 	}
 
 }
