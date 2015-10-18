@@ -3,10 +3,8 @@ package aima.gui.applications.search.map;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import aima.core.environment.map.AdaptableHeuristicFunction;
@@ -14,8 +12,6 @@ import aima.core.environment.map.ExtendableMap;
 import aima.core.environment.map.MapAgent;
 import aima.core.environment.map.MapEnvironment;
 import aima.core.environment.map.Scenario;
-import aima.core.environment.map.SimplifiedRoadMapOfAustralia;
-import aima.core.environment.map.SimplifiedRoadMapOfPartOfRomania;
 import aima.core.util.datastructure.Point2D;
 import aima.gui.framework.AgentAppController;
 import aima.gui.framework.AgentAppEnvironmentView;
@@ -53,10 +49,10 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 			for(int i = 0; i < localsNumber; i++){
 				lineParameters = br.readLine().split(" ");
 				System.out.println("local " + (i + 1) + ": " + String.join(",", lineParameters));
-				map.setDistAndDirToRefLocation(
+				map.setPosition(
 						lineParameters[0], 
 						Double.parseDouble(lineParameters[1]), 
-						Integer.parseInt(lineParameters[2]));
+						Double.parseDouble(lineParameters[2]));
 			}
 	
 			int routesNumber = Integer.parseInt(br.readLine());
@@ -105,7 +101,7 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		};
 
 		private MapType usedMap = null;
-		private static String[] ROMANIA_DESTS = (String[]) maps.get("Romania").getLocations().toArray(new String[maps.get("Romania").getLocations().size()]);
+		private static String[] ROMANIA_DESTS = (String[]) maps.get("Rio Grande do Sul").getLocations().toArray(new String[maps.get("Rio Grande do Sul").getLocations().size()]);
 //		private static String[] AUSTRALIA_DESTS = new String[] {
 //				"to Port Hedland", "to Albany", "to Melbourne",
 //				"to Random" };
@@ -159,7 +155,7 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		 */
 		@Override
 		protected void selectScenarioAndDest(int scenarioIdx, int destIdx) {
-			ExtendableMap map = (ExtendableMap) maps.get("Romania");
+			ExtendableMap map = (ExtendableMap) maps.get("Rio Grande do Sul");
 			MapEnvironment env = new MapEnvironment(map);
 			String agentLoc = map.getLocations().get(scenarioIdx);
 //			switch (scenarioIdx) {
