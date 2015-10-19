@@ -113,6 +113,8 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 			setSelectorItems(SEARCH_MODE_SEL, SearchFactory.getInstance()
 					.getSearchModeNames(), 1); // change the default!
 			setSelectorItems(HEURISTIC_SEL, new String[] { "=0", "SLD" }, 1);
+			setSelectorItems(DESTINATION_SEL, ROMANIA_DESTS, 0);
+			setSelectorItems(MAP_SEL, new Object[]{maps.keySet().toArray()[0], "asd"}, 0);
 		}
 
 		/**
@@ -122,26 +124,11 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		 */
 		@Override
 		protected void selectionChanged(String changedSelector) {
-			SelectionState state = getSelection();
-			int scenarioIdx = state.getIndex(MapAgentFrame.SCENARIO_SEL);
-			RouteFindingAgentFrame.MapType mtype = (scenarioIdx < 3) ? MapType.ROMANIA
-					: MapType.AUSTRALIA;
-			if (mtype != usedMap) {
-				usedMap = mtype;
-				String[] items = null;
-				switch (mtype) {
-					case ROMANIA:
-						items = ROMANIA_DESTS;
-						break;
-					default:
-						items = ROMANIA_DESTS;
-						break;
-	//				case AUSTRALIA:
-	//					items = AUSTRALIA_DESTS;
-	//					break;
-				}
-				setSelectorItems(DESTINATION_SEL, items, 0);
+			if(changedSelector != null){
+				SelectionState state = getSelection();
+				int mapIdx = state.getIndex(MapAgentFrame.MAP_SEL);
 			}
+			
 			super.selectionChanged(changedSelector);
 		}
 	}
@@ -293,11 +280,16 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 
 	/** Application starter. */
 	public static void main(String args[]) {
+		/**Iniciando com um mapa default**/
 		Class clazz = RouteFindingAgentApp.class;
 		String mapSourceURI = clazz.getResource(MAP_SOURCE_FILE).getPath();
 		
 		System.out.println(mapSourceURI);
 		createMap(mapSourceURI);
+		
+		/**Adicionando as opcoes de mapa**/
+		MapAgentFrame.mapList = new Object[]{maps.keySet().toArray()[0], ""};
+		
 		new RouteFindingAgentApp().startApplication();
 	}
 }
