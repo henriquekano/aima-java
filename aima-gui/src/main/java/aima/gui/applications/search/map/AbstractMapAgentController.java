@@ -55,6 +55,7 @@ public abstract class AbstractMapAgentController extends AgentAppController {
 		MapAgentFrame.SelectionState state = frame.getSelection();
 		selectScenarioAndDest(state.getIndex(MapAgentFrame.SCENARIO_SEL), state
 				.getIndex(MapAgentFrame.DESTINATION_SEL));
+		selectMap(state.getIndex(MapAgentFrame.MAP_SEL));
 		prepareView();
 		heuristic = createHeuristic(state.getIndex(MapAgentFrame.HEURISTIC_SEL));
 		search = SearchFactory.getInstance().createSearch(
@@ -138,6 +139,8 @@ public abstract class AbstractMapAgentController extends AgentAppController {
 	 * {@link #scenario} and {@link #destinations}.
 	 */
 	abstract protected void selectScenarioAndDest(int scenarioIdx, int destIdx);
+	
+	abstract protected void selectMap(int mapIdx);
 
 	/**
 	 * Primitive operation, responsible for preparing the view. Scenario and
