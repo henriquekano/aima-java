@@ -3,12 +3,14 @@ package aima.gui.framework;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,6 +55,9 @@ public class AgentAppFrame extends JFrame {
 	private JToggleButton pauseButton;
 	private JButton cancelButton;
 	private JLabel statusLabel;
+	private File file;
+	private JFileChooser fileChooser;
+	private JButton fileButton;
 
 	protected JSplitPane centerPane;
 	private MessageLoggerPanel messageLogger;
@@ -236,6 +241,11 @@ public class AgentAppFrame extends JFrame {
 		cancelButton.setBorder(new javax.swing.border.EtchedBorder());
 		statusPanel.add(cancelButton, BorderLayout.EAST);
 		contentPanel.add(statusPanel, BorderLayout.SOUTH);
+		
+		fileChooser = new JFileChooser();
+		fileButton = new JButton("Select a map");
+		fileButton.addActionListener(actionListener);
+		toolbar.add(fileButton);
 	}
 
 	/** Enables/disables combos and buttons. */
@@ -260,6 +270,11 @@ public class AgentAppFrame extends JFrame {
 			controller.prepare(changedSelector);
 			updateEnabledState();
 		}
+	}
+	
+	/** para carregar mapa através de arquivo de texto */
+	public void fileActionListener(File file) {
+		
 	}
 
 	// ////////////////////////////////////////////////////////
@@ -307,6 +322,11 @@ public class AgentAppFrame extends JFrame {
 								setStatus("Task stopped.");
 								setSimulationThread(null);
 							}
+						}
+					} else if (source == fileButton) {
+						int returnVal = fileChooser.showOpenDialog(AgentAppFrame.this);
+						if (returnVal == JFileChooser.APPROVE_OPTION) {
+							fileActionListener(fileChooser.getSelectedFile());
 						}
 					} else if (selectors.combos.contains(source)) {
 						err = "when preparing the agent ";

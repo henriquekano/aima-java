@@ -1,6 +1,7 @@
 package aima.gui.applications.search.map;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -38,10 +39,10 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 	
 	private static String CURRENT_MAP = "Rio Grande do Sul";
 	
-	private static void createMap(String filePath){
+	public static void createMap(File file){
 		try{
 			ExtendableMap map = new ExtendableMap();
-			FileInputStream fstream = new FileInputStream(filePath);
+			FileInputStream fstream = new FileInputStream(file);
 			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 			String[] lineParameters = {};
 			String mapName = br.readLine();
@@ -68,7 +69,7 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 						lineParameters[1], 
 						Double.parseDouble(lineParameters[2]));
 			}
-			
+			System.out.println("New map: " + file.getName());
 			maps.put(mapName, map);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -104,7 +105,7 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		};
 
 		private MapType usedMap = null;
-		private static String[] ROMANIA_DESTS = (String[]) maps.get(CURRENT_MAP).getLocations().toArray(new String[maps.get(CURRENT_MAP).getLocations().size()]);
+		private static String[] DESTINATIONS = (String[]) maps.get(CURRENT_MAP).getLocations().toArray(new String[maps.get(CURRENT_MAP).getLocations().size()]);
 //		private static String[] AUSTRALIA_DESTS = new String[] {
 //				"to Port Hedland", "to Albany", "to Melbourne",
 //				"to Random" };
@@ -112,11 +113,11 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		/** Creates a new frame. */
 		public RouteFindingAgentFrame() {
 			setTitle("RFA - the Route Finding Agent");
-			setSelectorItems(SCENARIO_SEL, ROMANIA_DESTS, 0);
+			setSelectorItems(SCENARIO_SEL, DESTINATIONS, 0);
 			setSelectorItems(SEARCH_MODE_SEL, SearchFactory.getInstance()
 					.getSearchModeNames(), 1); // change the default!
 			setSelectorItems(HEURISTIC_SEL, new String[] { "=0", "SLD" }, 1);
-			setSelectorItems(DESTINATION_SEL, ROMANIA_DESTS, 0);
+			setSelectorItems(DESTINATION_SEL, DESTINATIONS, 0);
 			setSelectorItems(MAP_SEL, maps.keySet().toArray(), 0);
 		}
 
@@ -129,20 +130,36 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		protected void selectionChanged(String changedSelector) {
 			if(changedSelector != null){
 				
-				SelectionState state = getSelection();
-				int mapIdx = state.getIndex(MapAgentFrame.MAP_SEL);
-				String newMapName = (String) MapAgentFrame.mapList[mapIdx];
-				aima.core.environment.map.Map newMap = maps.get(newMapName);
-				
 				if(changedSelector.equals(MapAgentFrame.MAP_SEL)){
 					//Muda as origens e destinos
+					SelectionState state = getSelection();
+					int mapIdx = state.getIndex(MapAgentFrame.MAP_SEL);
+					String newMapName = (String) MapAgentFrame.mapList[mapIdx];
+					aima.core.environment.map.Map newMap = maps.get(newMapName);
+					
+					setSelectorItems(DESTINATION_SEL, newMap.getLocations().toArray(), 0);
+					setSelectorItems(SCENARIO_SEL, newMap.getLocations().toArray(), 0);
+					
+				} else if(changedSelector.equals(MapAgentFrame.NEW_MAP_SEL)) {
+//					mudar os selects de acordo com o mapa novo
+					MapAgentFrame.mapList = maps.keySet().toArray();
+					String newMapName = (String) MapAgentFrame.mapList[0];
+					aima.core.environment.map.Map newMap = maps.get(newMapName);
+					setCURRENT_MAP(newMapName);
+					
+					setSelectorItems(MAP_SEL, MapAgentFrame.mapList, 0);
 					setSelectorItems(DESTINATION_SEL, newMap.getLocations().toArray(), 0);
 					setSelectorItems(SCENARIO_SEL, newMap.getLocations().toArray(), 0);
 				}
 				
 			}
-			
 			super.selectionChanged(changedSelector);
+		}
+		
+		@Override
+		public void fileActionListener(File file) {
+			RouteFindingAgentApp.createMap(file);
+			selectionChanged(MapAgentFrame.NEW_MAP_SEL);
 		}
 	}
 
@@ -154,7 +171,7 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		 * finding problems, the size of the list needs to be 1.
 		 */
 		@Override
-		protected void selectScenarioAndDest(int scenarioIdx, int destIdx) {
+		protected void selectScenarioAndDest(int scenarioIdx, int destIdx) {		
 			ExtendableMap map = (ExtendableMap) maps.get(CURRENT_MAP);
 			MapEnvironment env = new MapEnvironment(map);
 			String agentLoc = map.getLocations().get(scenarioIdx);
@@ -267,10 +284,16 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 			aima.core.environment.map.Map newMap = maps.get(newMapName);
 			
 			MapEnvironment newMapEnv = new MapEnvironment(newMap);
-			String agentLoc = newMap.getLocations().get(0);
-			this.scenario = new Scenario(newMapEnv, newMap, agentLoc);
-			
+			this.scenario = new Scenario(newMapEnv, newMap, scenario.getInitAgentLocation());
 		}
+	}
+
+	public static String getCURRENT_MAP() {
+		return CURRENT_MAP;
+	}
+
+	public static void setCURRENT_MAP(String cURRENT_MAP) {
+		CURRENT_MAP = cURRENT_MAP;
 	}
 
 	/**
@@ -309,8 +332,8 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		Class clazz = RouteFindingAgentApp.class;
 		String mapSourceURI = clazz.getResource(MAP_SOURCE_FILE).getPath();
 		
-		System.out.println(mapSourceURI);
-		createMap(mapSourceURI);
+		File file = new File(mapSourceURI);
+		createMap(file);
 		
 		/**Adicionando as opcoes de mapa**/
 		MapAgentFrame.mapList = maps.keySet().toArray();

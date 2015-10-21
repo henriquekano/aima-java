@@ -1,6 +1,7 @@
 package aima.gui.applications.search.map;
 
 import java.util.List;
+import java.io.File;
 import java.util.Map;
 
 import aima.gui.framework.AgentAppFrame;
@@ -25,6 +26,7 @@ public class MapAgentFrame extends AgentAppFrame {
 	public static String SEARCH_MODE_SEL = "SearchModeSelection";
 	public static String HEURISTIC_SEL = "HeuristicSelection";
 	public static String MAP_SEL = "MapSelection";
+	public static String NEW_MAP_SEL = "NewMapSelection";
 	
 	public static Object[] mapList;
 
@@ -43,7 +45,7 @@ public class MapAgentFrame extends AgentAppFrame {
 		
 		setEnvView(new MapAgentView());
 		setSplitPaneResizeWeight(0.75);
-		setSize(1000, 700);
+		setSize(1200, 700);
 	}
 	
 }
