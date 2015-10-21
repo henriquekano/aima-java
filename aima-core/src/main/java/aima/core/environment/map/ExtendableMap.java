@@ -113,6 +113,7 @@ public class ExtendableMap implements Map {
 	 * coordinate system.
 	 */
 	public void setPosition(String loc, double x, double y) {
+		links.addVertex(loc);
 		locationPositions.put(loc, new Point2D(x, y));
 	}
 
