@@ -8,6 +8,7 @@ import aima.core.environment.map.AdaptableHeuristicFunction;
 import aima.core.environment.map.MapEnvironment;
 import aima.core.environment.map.Scenario;
 import aima.gui.framework.AgentAppController;
+import aima.gui.framework.AgentAppFrame.SelectionState;
 import aima.gui.framework.MessageLogger;
 import aima.gui.framework.SimulationThread;
 
@@ -55,7 +56,7 @@ public abstract class AbstractMapAgentController extends AgentAppController {
 		MapAgentFrame.SelectionState state = frame.getSelection();
 		selectScenarioAndDest(state.getIndex(MapAgentFrame.SCENARIO_SEL), state
 				.getIndex(MapAgentFrame.DESTINATION_SEL));
-		selectMap(state.getIndex(MapAgentFrame.MAP_SEL));
+		selectMap(state);
 		prepareView();
 		heuristic = createHeuristic(state.getIndex(MapAgentFrame.HEURISTIC_SEL));
 		search = SearchFactory.getInstance().createSearch(
@@ -140,7 +141,7 @@ public abstract class AbstractMapAgentController extends AgentAppController {
 	 */
 	abstract protected void selectScenarioAndDest(int scenarioIdx, int destIdx);
 	
-	abstract protected void selectMap(int mapIdx);
+	abstract protected void selectMap(SelectionState state);
 
 	/**
 	 * Primitive operation, responsible for preparing the view. Scenario and

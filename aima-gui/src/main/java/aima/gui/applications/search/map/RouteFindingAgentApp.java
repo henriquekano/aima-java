@@ -18,6 +18,7 @@ import aima.core.util.datastructure.Point2D;
 import aima.gui.framework.AgentAppController;
 import aima.gui.framework.AgentAppEnvironmentView;
 import aima.gui.framework.AgentAppFrame;
+import aima.gui.framework.AgentAppFrame.SelectionState;
 import aima.gui.framework.MessageLogger;
 import aima.gui.framework.SimpleAgentApp;
 
@@ -145,7 +146,6 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 					MapAgentFrame.mapList = maps.keySet().toArray();
 					String newMapName = (String) MapAgentFrame.mapList[0];
 					aima.core.environment.map.Map newMap = maps.get(newMapName);
-					setCURRENT_MAP(newMapName);
 					
 					setSelectorItems(MAP_SEL, MapAgentFrame.mapList, 0);
 					setSelectorItems(DESTINATION_SEL, newMap.getLocations().toArray(), 0);
@@ -172,7 +172,7 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		 */
 		@Override
 		protected void selectScenarioAndDest(int scenarioIdx, int destIdx) {		
-			ExtendableMap map = (ExtendableMap) maps.get(CURRENT_MAP);
+			ExtendableMap map = (ExtendableMap) maps.get(getCURRENT_MAP());
 			MapEnvironment env = new MapEnvironment(map);
 			String agentLoc = map.getLocations().get(scenarioIdx);
 //			switch (scenarioIdx) {
@@ -278,13 +278,17 @@ public class RouteFindingAgentApp extends SimpleAgentApp {
 		}
 
 		@Override
-		protected void selectMap(int mapIdx) {
+		protected void selectMap(SelectionState state) {
 			// muda o mapa
+			int mapIdx = state.getIndex(MapAgentFrame.MAP_SEL);
 			String newMapName = (String) MapAgentFrame.mapList[mapIdx];
 			aima.core.environment.map.Map newMap = maps.get(newMapName);
 			
 			MapEnvironment newMapEnv = new MapEnvironment(newMap);
-			this.scenario = new Scenario(newMapEnv, newMap, scenario.getInitAgentLocation());
+			
+			this.scenario = new Scenario(newMapEnv, newMap, newMap.getLocations().get(state.getIndex(MapAgentFrame.SCENARIO_SEL)));
+			this.destinations = new ArrayList<String>();
+			this.destinations.add(newMap.getLocations().get(state.getIndex(MapAgentFrame.DESTINATION_SEL)));
 		}
 	}
 
